@@ -4,9 +4,10 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 4000;
+const usedUsernames = new Set();
 
 server.listen(port, function(){
-    console.log('Listening on %d:' + port);
+    console.log('Listening on localhost:' + port);
 });
 
 app.use(express.static(path.join(__dirname, 'static')));
@@ -20,11 +21,25 @@ io.on('connection', (socket) => {
             message: msg
         });
     });
-    socket.on('user_added', (username) => {
-        if (userJoined) return;
+    socket.on('check_username', (username) => {
+        if (usedUsernames.has(username)) {
+            socket.emit('username_taken');
+        } else {
+            usedUsernames.add(username);
+            socket.emit('username_available');
+        }
+    });
+    socket.on('user_added', (username) => { 
+        //if (usedUsernames.has(username)) {
+        //    socket.emit('username_taken', {
+        //        message: 'Username is already in use. Please choose a different username.'
+        //    });
+        //    return;
+        //}
         socket.username = username;
         userJoined = true;
         numberOfUsers++;
+        usedUsernames.add(username);
         socket.emit('login', {
             numberOfUsers: numberOfUsers
         });
@@ -45,6 +60,7 @@ io.on('connection', (socket) => {
     });
     socket.on('disconnect', () => {
         if (userJoined) {
+            usedUsernames.delete(socket.username);
             --numberOfUsers;
             socket.broadcast.emit('user_left', {
                 username: socket.username,

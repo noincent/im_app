@@ -29,13 +29,29 @@ $(function() {
     const setUsername = () => {
         username = cleanInput(usernameInput.val().trim());
         if (username) {
-            loginPage.fadeOut();
-            chatPage.show();
-            loginPage.off('click');
-            currentInput = inputMessage.focus();
-            socket.emit('user_added', username);
+            socket.emit('check_username', username);
         }
     }
+
+    socket.on('username_available', () => {
+        loginPage.fadeOut();
+        chatPage.show();
+        loginPage.off('click');
+        currentInput = inputMessage.focus();
+        socket.emit('user_added', username);
+        alert('Username is unique, you can proceed to chat!');
+    });
+
+    socket.on('username_taken', () => {
+        alert('Username is already in use. Please choose a different username.');
+        usernameInput.val('');
+        usernameInput[0].focus();
+        username = cleanInput(usernameInput.val().trim());
+        if (username) {
+            socket.emit('check_username', username);
+        }
+        // You can also update the UI to provide feedback to the user
+    });
 
     const sendMessage = () => {
         var message = cleanInput(inputMessage.val());
@@ -198,5 +214,7 @@ $(function() {
     socket.on('reconnect_error', () => {
         log('Attempt to reconnect has failed');
     });
+
+    
 
 });
