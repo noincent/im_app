@@ -87,3 +87,49 @@ ul {
     right: 0;
     width: 100%;
 }
+
+/* Add styling for the online users list */
+.online-users-list {
+    list-style: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #f7f7f7;
+    border-radius: 5px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.online-users-list li {
+    margin-bottom: 5px;
+    cursor: pointer;
+    padding: 5px;
+    background-color: #fff;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+
+.online-users-list li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Add styling for the chatroom select dropdown */
+.chatroom-select {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.chatroom-select:hover {
+    background-color: #f0f0f0;
+}

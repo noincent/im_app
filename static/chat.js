@@ -10,6 +10,29 @@ $(function() {
     var typing = false;
     var currentInput = usernameInput.focus();
     var socket = io();
+    var onlineUsersList = $('#online-users');
+    var chatroomSelect = $('.chatroom-select');
+    var currentChatroom = 'general'; // Default chatroom
+
+    chatroomSelect.on('change', function() {
+        var selectedChatroom = $(this).val();
+        if (selectedChatroom !== currentChatroom) {
+            // Clear existing messages and perform actions based on the selected chatroom
+            if (selectedChatroom === 'general') {
+                clearChatArea();
+                currentChatroom = 'general';
+                // Load general chat messages if needed
+            } else if (selectedChatroom === 'private') {
+                clearChatArea();
+                currentChatroom = 'private';
+                // Show online users and initiate private chat if needed
+            }
+        }
+    });
+
+    function clearChatArea() {
+        $('.messages').empty();
+    }
 
     const setParticipantsMessage = (data) => {
         var message = '';
@@ -51,6 +74,34 @@ $(function() {
             socket.emit('check_username', username);
         }
         // You can also update the UI to provide feedback to the user
+    });
+
+    socket.on('update_online_users', (users) => {
+        onlineUsersList.empty();
+        users.forEach((user) => {
+            onlineUsersList.append($('<li>').text(user));
+        });
+    });
+
+        // Listen for a user clicking on an online user's name
+    onlineUsersList.on('click', 'li', function() {
+        var recipient = $(this).text();
+        if (recipient !== username) { // Don't allow messaging yourself
+            var message = prompt('Enter your private message:');
+            if (message) {
+                // Emit a private_chat event to the server
+                socket.emit('private_chat', {
+                    recipient: recipient,
+                    message: message
+                });
+            }
+        }
+    });
+
+    socket.on('private_message', ({ sender, message }) => {
+        // Display the private message in the chat area
+        var privateMessage = `${sender} (private): ${message}`;
+        addChatMessage({ username: 'System', message: privateMessage });
     });
 
     const sendMessage = () => {
