@@ -32,7 +32,7 @@ $(function() {
             socket.emit('check_username', username);
         }
     }
-
+    chatPage.hide();
     socket.on('username_available', () => {
         loginPage.fadeOut();
         chatPage.show();
@@ -73,9 +73,9 @@ $(function() {
             typingMessages.remove();
         }
         var usernameDiv = $('<span class="username"/>').text(data.username).css('font-weight', 'bold');
-        var messageBodyDiv = $('<span class="messageBody">').text(data.message);
+        var messageBodyDiv = $('<p class="text">').text(data.message);
         var typingClass = data.typing ? 'typing' : '';
-        var messageDiv = $('<li class="message"/>').data('username', data.username).addClass(typingClass).append(usernameDiv, messageBodyDiv);
+        var messageDiv = $('.response:last').data('username', data.username).addClass(typingClass).append(usernameDiv, messageBodyDiv);
         addMessageElement(messageDiv, options);
     }
 

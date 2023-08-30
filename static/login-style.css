@@ -1,37 +1,39 @@
-/**
-* Typography
-*/
-body {
-    background-color: white;
+.login.page {
+    background-color: #000;
+    height: 100%;
+    position: absolute;
+    width: 100%;
 }
 
-h1 {
-    font-weight: bold;
+.login.page .form {
+    height: 100px;
+    margin-top: -0px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 30%;
 }
 
-p.large {
-    font-size: 1.3rem;
+.login.page .form .username_input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+    outline: none;
+    padding-bottom: 15px;
+    text-align: center;
+    width: 400px;
+    font-size: 170%;
+    letter-spacing: 3px;
+    color: #fff;
+    font-weight: 100;
 }
 
-/**
-    * Controls
-    */
-.button {
-    background-color: rgba(225, 190, 89, 1);
+.login.page .title {
+    font-size: 250%;
+    color: #fff;
+    font-weight: 100;
 }
 
-.button.expanded {
-    background-color: rgba(225, 190, 89, 1);
-}
-
-.button:focus,
-.button:hover {
-    background-color: #de1776;
-}
-
-/**
-    * Resources
-    */
 .login-wrapper {
     display: grid;
     grid-template-areas: "left right";
