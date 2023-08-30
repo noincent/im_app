@@ -221,7 +221,7 @@ $(function() {
 
     socket.on('login', (data) => {
         connected = true;
-        var message = "Welcome to Nodejs Chat Room";
+        var message = "Welcome to Giggle!";
         log(message, {
             prepend: true
         });
