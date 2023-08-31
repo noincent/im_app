@@ -42,7 +42,7 @@
                 </li>
               </ul>
             </nav>
-                  <section class="discussions">
+                  <section id="online-users" class ="online-users-list">
               <div class="discussion search">
                 <div class="searchbar">
                   <i class="fa fa-search" aria-hidden="true"></i>
@@ -106,6 +106,11 @@
             </section>
           </div>
         </div>
+        <select class="chatroom-select">
+          <option value="general">General Chat</option>
+          <option value="private">Private Chat</option>
+          <!-- Add more chatroom options as needed -->
+      </select>
       </li>
       <!-- LOGIN PAGE -->
       <li class="login page">
@@ -126,6 +131,7 @@
         </div>
       </li>
     </ul>
+    
     <script src="//code.jquery.com/jquery-3.5.0.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/chat.js"></script>
