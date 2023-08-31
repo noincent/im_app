@@ -301,6 +301,9 @@
 
 .chat .messages {
   padding: 25px 35px;
+  max-height: 530px;
+  /* Set the maximum height of the container */
+  overflow-y: auto;
 }
 
 .chat .messages .message {

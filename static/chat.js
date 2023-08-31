@@ -35,15 +35,15 @@ $(function() {
         $('.messages').empty();
     }
     //
-    const setParticipantsMessage = (data) => {
-        var message = '';
-        if (data.numberOfUsers === 1) {
-            message += "There is 1 participant";
-        } else {
-            message += "There are " + data.numberOfUsers + " participants";
-        }
-        log(message);
-    }
+    // const setParticipantsMessage = (data) => {
+    //     var message = '';
+    //     if (data.numberOfUsers === 1) {
+    //         message += "There is 1 participant";
+    //     } else {
+    //         message += "There are " + data.numberOfUsers + " participants";
+    //     }
+    //     log(message);
+    // }
 
     const log = (message, options) => {
         var el = $('<li>').addClass('log').text(message);
@@ -76,17 +76,7 @@ $(function() {
             socket.emit('check_username', username);
         }
     });
-    //
-    // var usernameDiv = $('<p class="name">').text(user)
-    // var discussionContDiv = $('<div class="desc-contact">').append(usernameDiv);
-    // var imageUrl = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80";
-    // var userPhotoDiv = $('div.photo'); 
-    // userPhotoDiv.css('background-image', 'url(' + imageUrl + ')');
-    // userPhotoDiv.append( $('<div class="online">'));
-    // var discussionDiv = $('<div class="discussion>');
-    // discussionDiv.append(discussionContDiv,userPhotoDiv);
-    // onlineUsersList.append(discussionDiv);
-
+    
     function getRandomImage() {
         var imageUrls = [
             "https://images.unsplash.com/photo-1505784045224-1247b2b29cf3?auto=format&fit=crop&w=1350&q=80",
@@ -122,17 +112,9 @@ $(function() {
         });
     });
     
-    // socket.on('update_online_users', (users) => {
-    //     onlineUsersList.empty();
-    //     users.forEach((user) => {
-    //         var usernameDiv = $('<p class="name">').text(user)
-    //         var discussionDiv = $('<div class="discussion>');
-    //         onlineUsersList.append(discussionDiv).text(user);
-    //     });
-    // });
 
         // Listen for a user clicking on an online user's name
-    onlineUsersList.on('click', 'li', function() {
+    onlineUsersList.on('click', 'div', function() {
         var recipient = $(this).text();
         if (recipient !== username) { // Don't allow messaging yourself
             var message = prompt('Enter your private message:');
@@ -270,10 +252,10 @@ $(function() {
 
     socket.on('login', (data) => {
         connected = true;
-        var message = "Welcome to Giggle Chat Room";
-        log(message, {
-            prepend: true
-        });
+        // var message = "Welcome to Giggle Chat Room";
+        // log(message, {
+        //     prepend: true
+        // });
         setParticipantsMessage(data);
     });
 
