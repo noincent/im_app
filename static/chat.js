@@ -156,9 +156,9 @@ $(function() {
         var usernameDiv = $('<span class="username"/>').text(data.username).css('font-weight', 'bold');
         var messageBodyDiv = $('<p class="text">').text(data.message);
         var typingClass = data.typing ? 'typing' : '';
-        var messageDiv = $('.response:last').data('username', data.username).addClass(typingClass).append(usernameDiv, messageBodyDiv);
+        var responseDiv = $('.response:last').data('username', data.username).addClass(typingClass).append(usernameDiv, messageBodyDiv);
+        var messageDiv = $('.message text-only').append(responseDiv);
         addMessageElement(messageDiv, options);
-        console.log(text(data.username),text(data.message));
     }
 
     const addChatTyping = (data) => {
