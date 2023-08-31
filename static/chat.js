@@ -77,12 +77,59 @@ $(function() {
         }
     });
     //
+    // var usernameDiv = $('<p class="name">').text(user)
+    // var discussionContDiv = $('<div class="desc-contact">').append(usernameDiv);
+    // var imageUrl = "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80";
+    // var userPhotoDiv = $('div.photo'); 
+    // userPhotoDiv.css('background-image', 'url(' + imageUrl + ')');
+    // userPhotoDiv.append( $('<div class="online">'));
+    // var discussionDiv = $('<div class="discussion>');
+    // discussionDiv.append(discussionContDiv,userPhotoDiv);
+    // onlineUsersList.append(discussionDiv);
+
+    function getRandomImage() {
+        var imageUrls = [
+            "https://images.unsplash.com/photo-1505784045224-1247b2b29cf3?auto=format&fit=crop&w=1350&q=80",
+            "https://images.unsplash.com/photo-1469050624972-f03b8678e363?auto=format&fit=crop&w=1350&q=80",
+            "https://images.unsplash.com/photo-1502901930015-158e72cff877?auto=format&fit=crop&w=1350&q=80",
+            "https://images.unsplash.com/photo-1501813722636-45de2fe4f9b4?auto=format&fit=crop&w=1350&q=80",
+            'https://images.unsplash.com/photo-1511029029301-60680e65f7c7?auto=format&fit=crop&w=634&q=80',
+            'https://images.unsplash.com/photo-1417577097439-425fb7dec05e?auto=format&fit=crop&w=1489&q=80']
+
+        var randomIndex = Math.floor(Math.random() * imageUrls.length);
+        return imageUrls[randomIndex];
+    }
+    
     socket.on('update_online_users', (users) => {
         onlineUsersList.empty();
         users.forEach((user) => {
-            onlineUsersList.append($('<li>').text(user));
+            var discussionDiv = $('<div class="discussion">');
+            
+            var imageUrl = getRandomImage();
+            var photoDiv = $('<div class="photo">').css('background-image', 'url(' + imageUrl + ')');
+            photoDiv.append($('<div class="online">'));
+            discussionDiv.append(photoDiv);
+            
+            var descContactDiv = $('<div class="desc-contact">');
+            var nameParagraph = $('<p class="name">').text(user);
+            descContactDiv.append(nameParagraph);
+            discussionDiv.append(descContactDiv);
+            
+            var timerDiv = $('<div class="timer">').text('0 sec'); // Assuming default timer value
+            discussionDiv.append(timerDiv);
+            
+            onlineUsersList.append(discussionDiv);
         });
     });
+    
+    // socket.on('update_online_users', (users) => {
+    //     onlineUsersList.empty();
+    //     users.forEach((user) => {
+    //         var usernameDiv = $('<p class="name">').text(user)
+    //         var discussionDiv = $('<div class="discussion>');
+    //         onlineUsersList.append(discussionDiv).text(user);
+    //     });
+    // });
 
         // Listen for a user clicking on an online user's name
     onlineUsersList.on('click', 'li', function() {
