@@ -1,4 +1,4 @@
-$(function() {
+// $(function() {
     var win = $(window);
     var usernameInput = $('.username_input'); // Input for username
     var messages = $('.messages'); // Messages area
@@ -14,6 +14,11 @@ $(function() {
     var onlineUsersList = $('#online-users');
     var chatroomSelect = $('.chatroom-select');
     var currentChatroom = 'general'; // Default chatroom
+
+
+
+    var publicmsgList = [];
+    var privatemsgList = [];
 
     chatroomSelect.on('change', function() {
         var selectedChatroom = $(this).val();
@@ -114,17 +119,28 @@ $(function() {
     
 
         // Listen for a user clicking on an online user's name
-    onlineUsersList.on('click', 'div', function() {
-        var recipient = $(this).text();
-        if (recipient !== username) { // Don't allow messaging yourself
-            var message = prompt('Enter your private message:');
-            if (message) {
-                // Emit a private_chat event to the server
-                socket.emit('private_chat', {
-                    recipient: recipient,
-                    message: message
-                });
-            }
+    onlineUsersList.on('click', 'div', function(e) {
+        var recipient = e.target.innerText;
+        if (recipient != username) { // Don't allow messaging yourself
+            // var message = prompt('Enter your private message:');
+            // if (message) {
+            //     // Emit a private_chat event to the server
+            //     socket.emit('private_chat', {
+            //         recipient: recipient,
+            //         message: message
+            //     });
+            //     console.log("PRIVATE: ",{
+            //         recipient: recipient,
+            //         message: message
+            //     } )
+            // }
+            console.log("SWITCHED CHAT to "+recipient);
+            currentChatroom = recipient;
+
+            //TODO: ONLY WHEN LOADING A NEW CHATROOM
+            //TODO: edit this function to run inside a for loop which iterates across a message list of type publicmsglist OR privatemsglist after clearing all the messages
+            //TODO: like this you can populate the entire chat from the stored chat history.
+
         }
     });
 
@@ -132,19 +148,48 @@ $(function() {
         // Display the private message in the chat area
         var privateMessage = `${sender} (private): ${message}`;
         addChatMessage({ username: 'System', message: privateMessage });
+
+        // add to list of private messages
+        privatemsgList.push({ sender, message });
     });
     //
     const sendMessage = () => {
         var message = cleanInput(inputMessage.val());
         if (message && connected) {
             inputMessage.val('');
+
+            //TODO: check here if we are in private chat / general and dont add any messages that do not match the current chat when they are sent
+            //TODO: this can be done by iterating anc checking the recipient field of the object
+            //TODO: the same needs to be done on the websocekt new_messagge recieve when socket.on('recieve new message') occurs.
+            //TODO: might be better to implement a sorting fucntion to re-use the code. eg. sortMSG(privatemsglist, publicmsglist, chatroom) which also returns from publicmsghlist when chatroom==general
+            //! fdsfsdf
+            //? fsdfdf
+            //* sdsds
+            // sdsd
             addChatMessage({
                 username: username,
                 message: message
             });
+
+            //TODO: modify this to send either new_message or private_message event to server and get rid of the other send private message function commented out above
             socket.emit('new_message', message);
+
+            console.log("CURRENT CHAT: "+currentChatroom);
+            if (currentChatroom == 'general') {
+                // add own messaeg to list of sent public messages
+                publicmsgList.push({username, message})
+            } else {
+                // add to private chat
+                privatemsgList.push({
+                    recipient: currentChatroom,
+                    sender: username,
+                    message: message
+                })
+            }
         }
     }
+
+    
 
     const addChatMessage = (data, options) => {
         var typingMessages = getTypingMessages(data);
@@ -156,9 +201,9 @@ $(function() {
         var usernameDiv = $('<span class="username"/>').text(data.username).css('font-weight', 'bold');
         var messageBodyDiv = $('<p class="text">').text(data.message);
         var typingClass = data.typing ? 'typing' : '';
-        var messageDiv = $('.response:last').data('username', data.username).addClass(typingClass).append(usernameDiv, messageBodyDiv);
+        var responseDiv = $('.response:last').data('username', data.username).addClass(typingClass).append(usernameDiv, messageBodyDiv);
+        var messageDiv = $('.message text-only').append(responseDiv);
         addMessageElement(messageDiv, options);
-        console.log(text(data.username),text(data.message));
     }
 
     const addChatTyping = (data) => {
@@ -261,6 +306,9 @@ $(function() {
 
     socket.on('new_message', (data) => {
         addChatMessage(data);
+
+        // add to public msg list
+        publicmsgList.push(data);
     });
 
     socket.on('user_joined', (data) => {
@@ -299,4 +347,4 @@ $(function() {
 
     
 
-});
+// });
